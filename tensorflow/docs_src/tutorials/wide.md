@@ -27,7 +27,7 @@ https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/learn/w
        # Mac OS X
        $ sudo easy_install pip
        $ sudo easy_install --upgrade six
-      ```
+       ```
 
     2. Use `pip` to install pandas:
 
@@ -379,7 +379,7 @@ the labels of the holdout data:
 ```python
 results = m.evaluate(input_fn=eval_input_fn, steps=1)
 for key in sorted(results):
-    print "%s: %s" % (key, results[key])
+    print("%s: %s" % (key, results[key]))
 ```
 
 The first line of the output should be something like `accuracy: 0.83557522`,
