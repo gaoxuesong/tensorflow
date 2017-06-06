@@ -607,8 +607,8 @@ inline void GEPP(
   }
   for (const auto* left_slice : left_slices) {
     const auto& left = *left_slice;
-    const auto* data3 = (left.data3.size() > 0) ? &left.data3[0] : nullptr;
-    const auto* data = (left.data.size() > 0) ? &left.data[0] : nullptr;
+    const auto* data3 = (!left.data3.empty()) ? &left.data3[0] : nullptr;
+    const auto* data = (!left.data.empty()) ? &left.data[0] : nullptr;
     const int num_blocks = left.index3_offset.size();
     int begin3 = 0;
     int begin = 0;
@@ -1489,10 +1489,6 @@ inline void LibxsmmSparseMatMul<TL, TR>::Compute(
     }
   });
   // Do matrix-matrix multiplication
-  // TODO(jewillco): libxsmm doesn't support beta != 1 yet -- remove when
-  // release
-  // includes beta handling
-  memset(output_data, 0, left_dim0 * right_dim1 * sizeof(TR));
   ptrdiff_t total_num_mult_blocks =
       libxsmm_spmdm_get_num_compute_blocks(&entry->handle);
   std::atomic<int> cur_mult_block_number;

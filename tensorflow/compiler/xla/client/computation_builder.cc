@@ -165,9 +165,10 @@ ComputationDataHandle ComputationBuilder::ConstantOp(
   }
 
   ConstantRequest request;
-  Literal* literal = request.mutable_literal();
-  populate(literal);
-  VLOG(3) << "created constant: " << literal->ShortDebugString();
+  Literal literal;
+  populate(&literal);
+  *request.mutable_literal() = literal.ToProto();
+  VLOG(3) << "created constant: " << request.literal().ShortDebugString();
   OpRequest op_request;
   *op_request.mutable_constant_request() = request;
   *op_request.mutable_computation() = computation_.handle();
@@ -1229,8 +1230,7 @@ StatusOr<bool> ComputationBuilder::IsConstant(
   VLOG(2) << "done with request";
 
   if (!s.ok()) {
-    NoteError(s);
-    return first_error_;
+    return s;
   }
   return response.is_constant();
 }
@@ -1255,8 +1255,7 @@ StatusOr<std::unique_ptr<GlobalData>> ComputationBuilder::ComputeConstant(
   VLOG(2) << "done with request";
 
   if (!s.ok()) {
-    NoteError(s);
-    return first_error_;
+    return s;
   }
 
   TF_RET_CHECK(response.output().handle() != 0);
